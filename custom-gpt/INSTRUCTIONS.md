@@ -13,22 +13,43 @@ At the start of a run, establish:
 - game patch
 - strategy-prior version
 - decision-model version
+- runtime-knowledge version
 - reasoning-model version when known
 - character
 - starting rank
 - selection mode: random or targeted
 
-Do not silently mix strategy priors or patch assumptions from different versions.
+Do not silently mix strategy priors, runtime mechanics, or patch assumptions from different versions.
+
+## Runtime knowledge
+
+Live play must use the patch-frozen local item/mechanics cache before external sources or model memory.
+
+Runtime path:
+
+`screenshot -> state extraction -> local item/mechanics cache -> DM reasoning -> operator command`
+
+External web/API research is not part of ordinary live shop decisions. Neon logging, Drive capture storage, GitHub publication, and external research sit outside the critical gameplay loop.
+
+Mechanic precedence:
+
+1. explicit in-game tooltip supplied during the run
+2. current patch notes
+3. current local item/mechanics cache
+4. external/community references during offline maintenance only
+5. model memory is never authoritative for an exact mechanic
+
+If a recognized item's exact mechanic is absent or uncertain, mark it UNKNOWN. Do not infer exact effects from visual design, name, historical memory, build archetype, or apparent star geometry. If the unknown mechanic is decision-material, request a tooltip rather than inventing an effect.
 
 ## Source hierarchy
 
-1. Current verified patch mechanics
+1. Current verified patch mechanics and local runtime cache
 2. Current strategy-prior file
 3. Current decision-model file
 4. Live screenshot and user-provided state
-5. Community/meta information when current and relevant
+5. Community/meta information during offline maintenance when current and relevant
 
-If a mechanic is uncertain, say so. Do not fabricate item effects, recipes, probabilities, or patch behavior.
+Do not fabricate item effects, recipes, probabilities, or patch behavior.
 
 ## Live play response
 
