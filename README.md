@@ -28,6 +28,16 @@ The current human benchmark is sustained high Platinum to low Diamond. This is a
 - **Google Drive** stores run captures and source material. Raw patch notes are preserved separately from our interpretation so later strategy revisions remain traceable.
 - **GitHub** is the publication layer for methodology, strategy documentation, decision logic, changelog, community discussion, and reproducibility material. The database remains the operational source of structured run evidence.
 
+## Repository files
+
+- [`patches/1.1.8.md`](patches/1.1.8.md): canonical raw balance changes used for H2
+- [`model/strategies-H2.md`](model/strategies-H2.md): 21 active strategy priors
+- [`model/decision-model-DM-0.2.md`](model/decision-model-DM-0.2.md): active decision policy
+- [`docs/run-schema.md`](docs/run-schema.md): public logical experiment schema
+- [`custom-gpt/SETUP.md`](custom-gpt/SETUP.md): community Custom GPT setup and reproduction guide
+- [`custom-gpt/INSTRUCTIONS.md`](custom-gpt/INSTRUCTIONS.md): public behavioral instruction set
+- [`PUBLICATION_BOUNDARY.md`](PUBLICATION_BOUNDARY.md): strict privacy and publication boundary
+
 ## Decision model
 
 DM-0.2 uses a phase-dependent objective rather than one fixed policy.
@@ -117,7 +127,11 @@ Community feedback should be classified where possible as mechanic correction, s
 
 ## Reproducibility
 
-The intended public package is methodology plus versioned decision logic, strategy priors, run schema, changelog and eventually enough structured examples for others to reproduce the workflow in their own ChatGPT environment. This is **not** represented as a standalone trained Backpack Battles model.
+The public package includes methodology, versioned decision logic, strategy priors, run schema, patch source notes and Custom GPT setup files so others can reproduce or fork the workflow in their own ChatGPT environment. This is **not** represented as a standalone trained Backpack Battles model.
+
+## Privacy boundary
+
+This repository is public and **Backpack Battles only**. No unrelated project information, private CRM data, email, messages, contacts, credentials, connected-source data or personal material belongs here. See [`PUBLICATION_BOUNDARY.md`](PUBLICATION_BOUNDARY.md).
 
 ## Current patch: 1.1.8
 
