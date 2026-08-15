@@ -20,11 +20,11 @@ Claims should remain falsifiable, versioned, and evidence-calibrated. Strategy s
 
 For each of the seven playable characters, **H2 contains three patch-relevant strategy priors, for 21 total**. These are starting hypotheses rather than forced build paths. The model may freestyle, converge toward a prior, discover an emergent line, pivot, or remain open depending on the actual shop and board state.
 
-## System architecture
+## Experiment architecture
 
-- **Neon Postgres** stores structured experimental data: runs, decisions, strategy hypotheses, decision-model versions, belief states, confidence, economic and transition variables, and outcomes.
-- **Google Drive** stores run captures and source material. Raw patch notes are preserved separately from interpretation so later strategy revisions remain traceable.
-- **GitHub** is the publication layer for methodology, strategy documentation, decision logic, anonymized run logs, community discussion, and reproducibility material.
+- Structured experimental records track runs, decisions, strategy hypotheses, model versions, belief states, confidence, transition variables, and outcomes.
+- Run captures and source material are retained separately from interpretation so later strategy revisions remain traceable.
+- This repository contains the public methodology, strategy documentation, decision logic, anonymized run logs, community discussion, and reproducibility material.
 
 ## Repository files
 
@@ -172,7 +172,7 @@ The public package includes methodology, versioned decision logic, strategy prio
 
 ## Privacy boundary
 
-This repository is public and **Backpack Battles only**. The human participant is referred to publicly as **Player**. No real-world identity data, unrelated project information, private CRM data, email, messages, contacts, credentials, connected-source data, or personal material belongs here.
+This repository is public and **Backpack Battles only**. The human participant is referred to publicly as **Player**. No real-world identity data, unrelated private project information, third-party confidential data, private correspondence, credentials, or incidental operational metadata belongs here.
 
 ## Changelog
 
