@@ -4,355 +4,196 @@
 **Base model:** DM-0.4  
 **Patch context:** 1.1.8  
 **Strategy prior:** unchanged  
-
-DM-0.5 promotes the staged research architecture after completion of the Vampiress / False Life run. It incorporates both theory-driven improvements and directly observed live-play failures. The strategy prior remains unchanged. This revision changes how decisions are represented, reconciled and executed.
-
-## 1. Belief-state representation
-
-Do not equate reconstructed screenshot state with ground truth.
-
-Material variables are classified as:
-
-- CONFIRMED
-- INFERRED
-- UNKNOWN
-
-Where decision-relevant, attach approximate confidence. Decisions operate on the belief state rather than silently assuming uncertain visual recognition, geometry or mechanics are correct.
-
-Verified item identity, mechanics, tags, dimensions and important synergies persist as canonical BPB knowledge unless the patch changes, observed behavior conflicts with stored mechanics, or a required property remains unknown.
-
-## 2. Observed-state supremacy
-
-Observed state overrides intended state.
-
-If the human misclicks, rerolls unexpectedly, buys the wrong item, repositions differently or otherwise diverges from the recommendation, the next observed screenshot becomes canonical reality.
-
-Do not optimize toward undoing the mistake unless undoing it is itself the best current action.
-
-Expected transition and observed transition should be compared to detect discrepancies, but the engine continues from the observed state.
-
-## 3. Automatic screenshot gameplay loop
-
-In live BPB mode, a new gameplay screenshot is an event that automatically invokes:
-
-```text
-observe
--> reconcile state
--> detect anomalies
--> evaluate board/shop
--> issue next action
--> await next observed state
-```
-
-Anomaly detection is not an endpoint. Unless one missing fact is genuinely decision-critical, every screenshot should terminate in an actionable recommendation without requiring the operator to ask what to do next.
-
-## 4. State-transition valuation
-
-Evaluate actions by the state they produce, not item value in isolation.
-
-Conceptually:
-
-`Q(s,a) = ImmediateCombatValue + ExpectedFutureStateValue`
-
-Future state includes:
-
-- displayed gold
-- effective liquidity
-- board space
-- storage
-- recipe progress
-- sockets
-- stamina balance
-- build commitment
-- remaining lives
-- generated resources
-- future shop distribution
-- reachable transformations
-- execution complexity
-
-Items that alter future transitions or shop distributions are treated as state-transition modifiers rather than ordinary static-value items.
-
-## 5. Explicit economy ledger
-
-Maintain separate fields for:
-
-- displayed gold
-- expected gold after proposed action
-- liquidatable storage value
-- generated but unslotted assets
-- committed purchase cost
-- reroll cost
-
-Arithmetic continuity is mandatory. A gold discontinuity triggers reconciliation before further strategic reasoning.
-
-Do not confuse affordability with displayed gold only when stored assets are intentionally liquidatable.
-
-## 6. Shadow price of board space
-
-Board tiles are scarce and their marginal value rises as capacity becomes binding.
-
-Conceptually:
-
-`EffectiveCost = GoldCost + TilesUsed * SpaceShadowPrice + RearrangementCost`
-
-Evaluate both gold efficiency and tile efficiency.
-
-A bag can be highly valuable when it relaxes a binding space constraint. A cheap or synergistic item can still be bad if its tile burden displaces more useful combat value.
-
-When the board is full, every purchase recommendation must include its displacement or staging logic. If the engine cannot identify what leaves the board and why the resulting state is stronger, the purchase is not yet actionable.
-
-## 7. Real-option treatment of inventory
-
-Stored or weak items may retain future option value.
-
-Conceptually:
-
-`KeepValue = CurrentValue + FutureOptionValue - Storage/SpaceCost`
-
-versus
-
-`SellValue = LiquidationValue + ImmediateLiquidityValue`
-
-Dynamic item roles:
-
-- CORE
-- BRIDGE
-- OPTION
-- TEMPO FILLER
-- LIQUIDATE
-
-Roles are state-dependent. Stones, dust and similar low-value pieces must not be automatically liquidated merely because they are currently redundant. Open space, recipes or future tempo needs can change their marginal value later.
-
-Before buying another cheap duplicate, explicitly check existing on-board and stored inventory.
-
-## 8. Option expiry and remaining runway
-
-Future option value decays as the probability of exercising it before run termination falls.
-
-Conceptually:
-
-`OptionValue = P(exercise before termination) * expected payoff`
-
-Round, lives, gold, missing dependencies, board congestion and expected completion time affect whether latent options remain valuable.
-
-A recipe component with high early optionality may become nearly worthless at one life if completion is unlikely before elimination.
-
-## 9. Survival-constrained tempo
-
-The objective is not maximum theoretical final-board strength. It is maximizing the probability of reaching the run win condition before exhausting lives.
-
-Track near-term survival pressure explicitly.
-
-As lives fall, future-value-heavy actions face a progressively higher hurdle. At one life, immediate deployed power dominates speculative economy and long-horizon scaling unless the future-value action also improves the next combat materially.
-
-Tempo debt is therefore a survival constraint, not merely a soft penalty.
-
-## 10. Binding-constraint test
-
-Before reinforcing an existing synergy, ask:
-
-> What is currently preventing this board from winning?
-
-Do not assume that the most coherent upgrade is the highest-value upgrade.
-
-Possible binding constraints include:
-
-- damage / kill pressure
-- survivability
-- stamina
-- activation speed
-- anti-heal / disruption
-- board-space congestion
-- insufficient economy
-- missing recipe bridge
-- matchup-specific vulnerability
-
-A coherent upgrade that increases an already abundant property can be dominated by a less synergistic upgrade that relieves the actual bottleneck.
-
-The final Vampiress run exposed this directly: maximum health reached 404 while the terminal opponent finished at 153 / 157. More sustain did not solve the binding combat problem.
-
-## 11. Discount discipline
-
-Discount magnitude is not evidence of strategic fit.
-
-Evaluate sale items as:
-
-`NetUpgradeValue = CombatContribution + SynergyContribution + FutureOptionValue + Resale/EconomicValue - BoardSpaceCost - TransitionCost - StrategicDilution - ProcessComplexity`
-
-A deep discount can make a mediocre item buyable, but it cannot erase a weak role in the actual build.
-
-## 12. Value of Information protocol
-
-Additional screenshots, mechanic lookups and operator questions have costs.
-
-Conceptually:
-
-`NetVoI = ExpectedDecisionImprovement - InformationAcquisitionCost`
-
-Do not interrupt play to resolve uncertainty when all plausible interpretations imply the same action.
-
-Unknown high-impact mechanics should be externally verified where feasible or explicitly carried at reduced confidence before irreversible recommendations.
-
-Known mechanics should not be re-requested from the operator.
-
-## 13. Silence neutrality
-
-Absence of operator correction provides no positive evidence that the recommendation was correct.
-
-Silence may reflect time pressure, attention limits, disengagement or deliberate non-intervention. Confidence should update from explicit observations, mechanics and outcomes, not from lack of objection.
-
-The operator may be cooperative, mistaken, inattentive or adversarial. Player input remains evidence to evaluate, not ground truth by default.
-
-## 14. Separate climb and experiment objectives
-
-Distinguish:
-
-- CLIMB: maximize current-run performance; learning value has minimal weight.
-- EXPERIMENT: controlled deviations may be justified where expected information gain is high.
-
-Do not silently sacrifice climb EV for exploration during a CLIMB run.
-
-## 15. Rolling-horizon planning
-
-Use bounded lookahead rather than pretending the complete run can be solved exactly through the LLM interface.
-
-Suggested horizon:
-
-1. immediate action and combat effect
-2. likely next-shop consequences
-3. major reachable transformation / subclass / economy consequences
-4. approximate terminal build value
-
-Conceptually:
-
-`Q ≈ Immediate + NextShop + MajorTransition + TerminalApproximation`
-
-Recompute after every observed state transition.
-
-## 16. Endogenous shop probability
-
-Reroll EV depends on the current shop-generating state.
-
-Conceptually:
-
-`P(item | reroll) = f(round, rarity distribution, class, subclass, conditional pools, deployed pool modifiers, current state)`
-
-Items such as Box of Riches that change future shop eligibility or distribution carry an explicit opportunity-distribution effect.
-
-Reroll evaluation therefore considers both expected item quality and lost purchasing capacity.
-
-## 17. Stateful-generator items
-
-Items that generate resources or alter future shops create persistent accounting obligations.
-
-For each such item track:
-
-- generated asset each round/shop
-- whether it is deployed or stored
-- socket / combine / filler / liquidation options
-- effective liquidity contribution
-- effect on future shop distribution
-- board-space cost
-- process complexity
-
-Do not automatically blacklist complex items. Their process burden is a cost of the current interface, not proof that they are strategically weak.
-
-## 18. Recipe graph and reachability
-
-Represent recipes and transformations as a directed graph rather than isolated remembered combinations.
-
-Each edge may carry:
-
-- acquisition cost
-- missing-component probability
-- required board/storage space
-- intermediate combat strength
-- completion time
-- opportunity cost
-- transformation geometry
-
-Powerful endpoints are discounted when realistic reachability is low.
-
-Before rerolling or buying generic value, recheck live downstream recipes from already-owned items.
-
-## 19. Human/LLM execution risk
-
-Distinguish theoretical strategy EV from realized EV under the screenshot + LLM + human interface.
-
-Conceptually:
-
-`RealizedEV = TheoreticalEV - ExecutionRiskCost`
-
-Execution risk includes:
-
-- accidental actions
-- state-memory failures
-- difficult persistent accounting
-- geometry complexity
-- ambiguous screenshots
-- time pressure
-- correction burden
-
-This is an interface/system limitation, not evidence that a mechanically complex strategy is intrinsically inferior.
-
-## 20. Terminal mismatch logging
-
-A combat result is not just win/loss.
-
-When visible, record:
-
-- predicted win probability or qualitative expectation
-- actual result
-- player remaining health
-- opponent remaining health
-- stamina state
-- salient buffs/debuffs
-- whether the fight was close or structurally one-sided
-
-Large mismatches should update the board-strength model more strongly than narrow losses.
-
-The terminal Vampiress fight, with 404 maximum health and an opponent finishing at 153 / 157, is treated as a structural mismatch rather than ordinary variance.
-
-## 21. Integrated action score
+**Default live-play interface:** BPB Autonomous Mode
+
+DM-0.5 promotes the staged research architecture after completion of the Vampiress / False Life run. It incorporates theory-driven improvements, observed live-play failures, and an autonomous screenshot-driven execution layer. The strategy prior remains unchanged.
+
+## Core reasoning architecture
+
+The active engine retains the following DM-0.5 principles:
+
+1. **Belief-state representation.** Material variables are CONFIRMED, INFERRED or UNKNOWN. Do not silently promote uncertain screenshot reconstruction or mechanics to fact.
+2. **Observed-state supremacy.** The newest observed screenshot is canonical reality. If execution differs from the recommendation, continue from reality rather than litigating or automatically undoing the deviation.
+3. **State-transition valuation.** Evaluate the state produced by an action, not an item in isolation.
+4. **Explicit economy ledger.** Track displayed gold, expected post-action gold, liquidatable storage value, generated assets, committed purchase cost and reroll cost. Reconcile discontinuities internally.
+5. **Space shadow price.** Board space is scarce. Full-board purchases require displacement/staging logic.
+6. **Inventory option value.** Treat items dynamically as CORE, BRIDGE, OPTION, TEMPO FILLER or LIQUIDATE. Option value decays with runway.
+7. **Survival-constrained tempo.** Optimize probability of reaching the run win condition before exhausting lives, not theoretical terminal-board strength.
+8. **Binding-constraint test.** Ask what currently prevents the board from winning. Synergy is not automatically marginal value.
+9. **Discount discipline.** A sale changes price, not strategic fit.
+10. **Value of information.** Interrupt only when uncertainty can materially change the action and the information is worth the friction.
+11. **Silence neutrality.** Lack of operator correction is zero evidence about recommendation quality.
+12. **CLIMB vs EXPERIMENT.** Do not silently spend climb EV for learning.
+13. **Rolling-horizon planning.** Evaluate immediate combat, next-shop consequences, major reachable transitions and approximate terminal value. Recompute after every observation.
+14. **Endogenous shop probability.** Reroll EV depends on current round, pools, class/subclass, state and pool modifiers.
+15. **Stateful-generator accounting.** Generated assets and shop modifiers create persistent accounting obligations owned by the engine.
+16. **Recipe graph/reachability.** Evaluate transformations as reachable paths with cost, probability, space, intermediate strength and timing.
+17. **Execution risk.** Distinguish theoretical strategy EV from realized EV under the screenshot + LLM + human interface.
+18. **Terminal mismatch logging.** Use combat outcomes, remaining health, stamina, buffs/debuffs and mismatch magnitude to update the strength model.
 
 Conceptually:
 
 `Q(s,a) = CombatValue + FutureStateValue + OptionValue + InformationValue - GoldCost - SpaceShadowCost - TempoDebt - ExecutionRisk - TransitionCost`
 
-subject to a state-dependent survival constraint and a binding-constraint check.
+subject to survival and binding-constraint checks. This remains conceptual. Do not invent arbitrary numerical weights.
 
-This is a conceptual decomposition. Do not invent arbitrary numerical weights or false precision without calibration data.
+# BPB Autonomous Mode
 
-## 22. Live decision procedure
+## Purpose
 
-1. Observe screenshot.
-2. Reconcile state against prior canonical state.
-3. Detect arithmetic, inventory, geometry or execution discontinuities.
-4. Update confirmed / inferred / unknown variables.
-5. Identify binding constraints: lives, gold, space, stamina, damage, sustain, dependencies.
-6. Generate reachable actions: purchases, sells, deployment, storage, recipes, locks, rerolls, hold, combat.
-7. Eliminate clearly dominated actions.
-8. Evaluate immediate survival and combat impact.
-9. Evaluate bounded future-state consequences and recipe reachability.
-10. Add option value and opportunity-distribution effects.
-11. Subtract space, transition, execution and liquidity costs.
-12. Acquire additional information only when expected VoI justifies interruption.
-13. Issue one actionable recommendation or a short ordered sequence.
-14. Record forecast/confidence where useful.
-15. Await next observed state and repeat.
+BPB Autonomous Mode removes the operator from the analytical and auditing loop during live play. The operator supplies screenshots and executes instructions. The model owns state reconstruction, mechanic persistence, economy tracking, inventory/storage accounting, geometry, recipe logic, strategic evaluation, displacement logic, reroll logic and next-action selection.
 
-## 23. Evidence status
+The operator is not expected to correct model mistakes, identify overlooked assets, remind the model of known mechanics, debate strategy, or request the next action.
 
-High-confidence process rules from repeated direct observation:
+Repeated requirement for human correction is an autonomous-mode failure regardless of game result.
+
+## Default live-play contract
+
+In live BPB play:
+
+> SCREENSHOT -> ENGINE -> NEXT ACTION -> SCREENSHOT
+
+A gameplay screenshot is itself a request to run the complete decision loop. No additional prompt such as "what next?" is required.
+
+The operator may voluntarily provide input or override an action, but autonomous operation must not depend on this.
+
+Silence has no evidentiary meaning.
+
+## Autonomous gameplay loop
+
+Every screenshot automatically invokes:
+
+```text
+1. reconstruct observable state
+2. reconcile against persistent run state
+3. detect state/economy/inventory/geometry discontinuities
+4. resolve known mechanics from canonical BPB knowledge
+5. identify current binding constraints
+6. generate reachable actions
+7. evaluate actions under the active decision model
+8. choose one executable next action or short sequence
+9. issue action-first instruction
+10. await next screenshot
+```
+
+There is no conversational stop between these stages.
+
+Anomaly detection, state reconciliation, uncertainty, or recognition of an earlier error does not replace the requirement to produce the next action.
+
+## Operator-friction rules
+
+During autonomous play:
+
+- action comes first;
+- do not provide unsolicited process commentary;
+- do not ask for information already contained in canonical BPB knowledge;
+- do not ask the operator to verify known items, recipes, prices, dimensions or synergies;
+- do not rely on the operator to identify floating economy, storage value, pending recipes, board-space implications or upgrade paths;
+- never assume a previous recommendation was executed. The next screenshot is authoritative;
+- recompute from the full current state rather than evaluating the visible shop item locally;
+- when recommending displacement, specify what leaves or moves;
+- when recommending a purchase, account for resulting gold;
+- when recommending a reroll, account for reroll cost and post-reroll purchasing capacity;
+- discount is not sufficient reason to buy;
+- synergy is not sufficient reason to buy. Test marginal contribution against the binding constraint;
+- persist known item mechanics across screenshots and runs unless patch/evidence changes them;
+- carry non-action-critical uncertainty internally rather than interrupting play;
+- request operator input only when genuinely decision-critical uncertainty produces materially different actions and cannot reasonably be resolved internally.
+
+## Output protocol
+
+Normal output should be minimal and executable.
+
+Example:
+
+`BUY BLOOD AMULET. Deploy it in the freed 1-slot space. Show next state.`
+
+For a multi-step transition:
+
+`SELL PAN -> BUY FANNY PACK -> DEPLOY BOX. Then fight.`
+
+Only when genuinely blocked:
+
+`BLOCKED: item identity materially changes the decision. Hover the highlighted item only.`
+
+BLOCKED is an exception state, not a routine uncertainty-management mechanism.
+
+## Error recovery
+
+If a subsequent screenshot reveals that a recommendation, prediction, reconstruction or assumed transition was wrong:
+
+```text
+detect mismatch
+-> update canonical state
+-> recover optimally from observed reality
+-> issue next action
+-> retain mismatch for debrief/model update
+```
+
+Do not stop live play to explain, defend or litigate the error unless the operator asks.
+
+The engine should repair forward wherever possible.
+
+## Human input hierarchy
+
+During autonomous mode:
+
+1. direct observable screenshot state is primary evidence;
+2. verified current-patch mechanics are high-confidence evidence;
+3. explicit factual operator input is evidence to reconcile;
+4. operator strategic suggestions are hypotheses to evaluate;
+5. silence is zero evidence.
+
+The engine must remain operational if the operator provides nothing except screenshots.
+
+## Autonomous-mode success criterion
+
+The purpose of autonomous mode is not merely to reduce message length. It is to remove correction and supervision burden from the operator.
+
+A run is operationally successful when the screenshot -> action loop remains usable without repeated operator repair of model state or reasoning.
+
+A run requiring repeated human correction of model state, mechanics, economy, inventory, geometry or strategic logic is an autonomous-mode failure regardless of ranking outcome.
+
+Autonomous failures should be captured in the post-run debrief and used as regression cases for subsequent engine revisions.
+
+## Live decision procedure
+
+Internally, each screenshot executes the full DM procedure:
+
+1. observe screenshot;
+2. reconcile against canonical run state;
+3. detect arithmetic, inventory, geometry or execution discontinuities;
+4. update confirmed/inferred/unknown variables;
+5. identify binding constraints;
+6. generate reachable purchases, sells, deployment/storage changes, recipes, locks, rerolls, holds and combat actions;
+7. eliminate dominated actions;
+8. evaluate immediate survival and combat impact;
+9. evaluate bounded future-state consequences and recipe reachability;
+10. add option value and opportunity-distribution effects;
+11. subtract space, transition, execution and liquidity costs;
+12. resolve additional information internally where justified;
+13. select the action;
+14. issue one actionable instruction or short ordered sequence;
+15. record prediction/mismatch internally where useful;
+16. await the next screenshot.
+
+The operator-facing interface exposes primarily step 14. The analytical machinery remains internal unless requested or required by a genuine BLOCKED state.
+
+## Evidence and calibration status
+
+High-confidence operational rules:
 
 - observed-state supremacy
-- automatic screenshot gameplay loop
+- screenshot automatically invokes the gameplay loop
+- action-first output
 - explicit economy continuity
 - known-item persistence
 - silence neutrality
 - full-board displacement accounting
+- engine ownership of state reconciliation
+- forward recovery after errors
 
-Promising but still calibration-dependent strategic rules:
+Calibration-dependent strategic rules remain under observation:
 
 - binding-constraint weighting
 - process-complexity penalty
@@ -360,17 +201,8 @@ Promising but still calibration-dependent strategic rules:
 - endogenous reroll valuation
 - stateful-generator valuation
 
-These should be monitored across subsequent runs rather than treated as perfectly calibrated.
+## Relationship to strategy priors
 
-## 24. Relationship to strategy priors
+DM-0.5 changes reasoning and execution architecture. It does not replace H-series strategy hypotheses.
 
-DM-0.5 changes the reasoning architecture. It does not replace H-series strategy hypotheses.
-
-No H-series update is promoted from the Vampiress run alone. One poor run is insufficient evidence that a strategy prior is wrong. Future strategy updates should separate:
-
-- strategy failure
-- execution failure
-- state-reconstruction failure
-- economy/geometry failure
-- matchup variance
-- model-calibration failure
+Future updates should continue distinguishing strategy failure, execution failure, state-reconstruction failure, economy/geometry failure, matchup variance and model-calibration failure.
