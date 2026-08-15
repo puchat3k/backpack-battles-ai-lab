@@ -2,10 +2,10 @@
 
 > An experiment in AI-directed Backpack Battles play.
 
-**Status:** live experiment — Run #001 paused after Round 6  
+**Status:** paused indefinitely after Run #003  
 **Canonical game patch:** 1.1.8  
 **Strategy prior set:** H2  
-**Decision model:** DM-0.3  
+**Decision model:** DM-0.6  
 **Reasoning model:** GPT-5.6 Sol
 
 ## Purpose
@@ -30,16 +30,22 @@ For each of the seven playable characters, **H2 contains three patch-relevant st
 
 - [`patches/1.1.8.md`](patches/1.1.8.md): canonical raw balance changes used for H2
 - [`model/strategies-H2.md`](model/strategies-H2.md): 21 active strategy priors
-- [`model/decision-model-DM-0.3.md`](model/decision-model-DM-0.3.md): active decision policy
-- [`model/decision-model-DM-0.2.md`](model/decision-model-DM-0.2.md): previous decision policy
+- [`model/decision-model-DM-0.6.md`](model/decision-model-DM-0.6.md): latest decision policy tested before pause
+- [`model/decision-model-DM-0.3.md`](model/decision-model-DM-0.3.md): earlier decision policy
+- [`model/decision-model-DM-0.2.md`](model/decision-model-DM-0.2.md): earlier decision policy
 - [`docs/run-schema.md`](docs/run-schema.md): public logical experiment schema
-- [`docs/run-001-anonymized-log.md`](docs/run-001-anonymized-log.md): anonymized live-run checkpoint
+- [`docs/run-001-anonymized-log.md`](docs/run-001-anonymized-log.md): anonymized Run #001 checkpoint
+- [`docs/run-002-vampiress-live-log.md`](docs/run-002-vampiress-live-log.md): Run #002 live decision log and review
+- [`docs/run-003-ranger-debrief.md`](docs/run-003-ranger-debrief.md): Run #003 debrief, failure analysis, Player assessment, and pause rationale
+- [`docs/process-observations.md`](docs/process-observations.md): cross-run process observations
 - [`custom-gpt/SETUP.md`](custom-gpt/SETUP.md): community Custom GPT setup and reproduction guide
 - [`custom-gpt/INSTRUCTIONS.md`](custom-gpt/INSTRUCTIONS.md): public behavioral instruction set
 
 ## Decision model
 
-DM-0.3 retains the phase-dependent objective from DM-0.2 while adding explicit reachable-state reasoning.
+DM-0.3 retained the phase-dependent objective from DM-0.2 while adding explicit reachable-state reasoning. Later models extended the framework through DM-0.6 with stronger state reconciliation, deployment accounting, transaction planning, Player-input discipline, and autonomous execution rules.
+
+Run #003 showed that documenting those safeguards did not reliably enforce them during live inference. The experiment is therefore paused rather than proceeding automatically to DM-0.7.
 
 ### Early game: tempo
 
@@ -156,6 +162,8 @@ Player gameplay judgment is deliberately not treated as an authority signal.
 
 The model then recomputes independently. Meaningful Player/model divergences are retained for analysis.
 
+Run #003 showed that the live model did not reliably maintain this distinction. Player hypotheses could still be absorbed too readily as model state, which is now treated as a first-class experimental failure rather than a solved policy problem.
+
 ## Measurement
 
 Decision quality is evaluated **ex ante** separately from stochastic combat outcomes. Major decisions may record confidence so calibration can later be tested.
@@ -165,6 +173,8 @@ Results should be segmented by `patch x H-version x DM-version x reasoning-model
 ## Policy-change rule
 
 Do not revise the decision model because of isolated outcomes or Player preference. A material change requires repeated evidence, a clear independent theoretical justification, or a strong externally verified correction. Every material logic change receives a new DM version.
+
+The Run #003 pause adds an additional practical constraint: another prompt-level revision is not justified merely because DM-0.6 failed. Any resumption should first test whether structured game state, deterministic validation, and a stronger item/mechanics database are required.
 
 ## Reproducibility
 
@@ -185,9 +195,12 @@ Added explicit freestyling candidate generation and the intermediate convergence
 ### DM-0.3
 Added reachable-state search, persistent re-check of deferred transformations, neutral Player-question handling, dynamic reroll thresholds, critical-mass directionality, full pivot-transition accounting, deterministic-node lookahead, explicit lock/unlock checks, and pre-combat forecast calibration.
 
+### DM-0.4 to DM-0.6
+Successive revisions added stronger economic-state accounting, board-space and deployment checks, staged transformations, generator valuation, tempo-debt tracking, full-state gates, transaction planning, storage discipline, autonomous action semantics, and recovery/surrender logic. Run #003 demonstrated that several of these documented safeguards did not reliably execute in live play.
+
 ### H2
 Recalculated for patch 1.1.8. Twenty-one active strategy priors across seven characters. Patch-sensitive deltas applied without claiming simulated or empirical optimality.
 
 ## Current experiment state
 
-**Run #001 is paused after Round 6 at 4 wins / 2 losses with 3 lives remaining.** The played segment used DM-0.2. The run resumes under DM-0.3.
+**The experiment is paused indefinitely after Run #003.** Run #003 used DM-0.6 and was terminated voluntarily by Player after repeated state-management, space-accounting, action-completeness, and evidence-calibration failures. The approved debrief concludes that another natural-language policy revision is not currently justified. A future resumption should first test whether the experiment needs a verified item/mechanics database, structured symbolic game state, deterministic legality/geometry validation, and a lower-friction execution interface.
