@@ -30,7 +30,7 @@ The active engine retains the following DM-0.5 principles:
 16. **Recipe graph/reachability.** Evaluate transformations as reachable paths with cost, probability, space, intermediate strength and timing.
 17. **Execution risk.** Distinguish theoretical strategy EV from realized EV under the screenshot + LLM + human interface.
 18. **Terminal mismatch logging.** Use combat outcomes, remaining health, stamina, buffs/debuffs and mismatch magnitude to update the strength model.
-19. **Observation economy.** CEO interaction is scarce. Batch deterministic, low-uncertainty actions and request a new screenshot only when the expected information can materially change the next decision.
+19. **Observation economy.** Operator interaction is scarce. Batch deterministic, low-uncertainty actions and request a new screenshot only when the expected information can materially change the next decision.
 
 Conceptually:
 
