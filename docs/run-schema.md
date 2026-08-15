@@ -111,4 +111,4 @@ Additional analysis can examine commitment state, strategy mode, decision confid
 
 ## Privacy boundary
 
-The public repository is scoped only to the Backpack Battles AI Lab experiment. No data from unrelated projects, work activity, personal CRM systems, private messages, contacts, or other connected sources belongs in this schema or repository.
+The public repository is scoped only to the Backpack Battles AI Lab experiment. No unrelated project data, private correspondence, third-party confidential information, personal account data, credentials, or other non-public context belongs in this schema or repository.
