@@ -244,6 +244,64 @@ Current minimum sufficient architecture:
 
 Reconsider heavier data ingestion or a purpose-built state engine only if repeated DM-0.6 runs show that state reconstruction or combinatorial bookkeeping remains the dominant performance bottleneck after this refactor.
 
+## 16. Run viability and surrender policy
+
+The experiment-level objective dominates the in-game objective. **Player time and patience are the ultimate scarce resources.** The engine must not assume that every damaged run deserves to be played until formal game-over.
+
+At materially impaired states, evaluate three actions:
+
+`CONTINUE / ATTEMPT RECOVERY / SURRENDER`
+
+Use a qualitative value comparison:
+
+`ContinueValue = recovery probability × recovered-run value + remaining information value - expected Player cost`
+
+`RestartValue = expected fresh-run value - restart cost - expected Player cost`
+
+Do not assign false numerical precision until empirical calibration exists.
+
+Maintain a run-viability state:
+
+`HEALTHY -> IMPAIRED -> CRITICAL -> TERMINAL`
+
+- **HEALTHY:** normal play. No viability intervention.
+- **IMPAIRED:** meaningful tempo/capital/board deficit exists, but ordinary recovery remains plausible.
+- **CRITICAL:** accumulated disadvantage may be effectively irreversible. Before further routine spending, perform an explicit recovery-feasibility audit.
+- **TERMINAL:** additional expected information and plausible recovery value no longer clear Player-time cost relative to restarting. Recommend `SURRENDER`.
+
+Low win probability alone is not sufficient for surrender. A losing run may remain experimentally valuable.
+
+### Recovery-feasibility audit
+
+At CRITICAL, identify an actual reachable recovery route rather than relying on generic shop luck. Consider:
+
+- deployed board strength relative to round;
+- idle/stranded capital and whether it can realistically be converted;
+- current gold and liquidation options;
+- space constraints and consolidation opportunities;
+- recipe/combinational rescue paths;
+- remaining lives/tries and likely number of decision cycles available;
+- magnitude and reversibility of prior tempo loss;
+- recent combat severity;
+- expected Player interactions required to test the recovery;
+- whether an unresolved experimental hypothesis makes continued play informative.
+
+If no credible recovery path can be articulated, prefer surrender over consuming Player time to confirm an already high-confidence failure.
+
+### Failure attribution
+
+A surrender caused materially by accumulated engine decisions is recorded as an **engine failure**, not hidden as an abandoned/incomplete run.
+
+Track at minimum:
+
+`run_surrendered_due_to_model_induced_unrecoverable_state = true/false`
+
+The purpose is to preserve falsifiability and prevent surrender from artificially improving reported run outcomes.
+
+Surrender is therefore a legitimate autonomous recommendation and should appear in the live interface as simply:
+
+`SURRENDER -> restart run.`
+
 ## Live output contract
 
 Normal response is concise and executable.
@@ -256,6 +314,8 @@ Examples:
 
 `BLOCKED: lower-left item could materially change the decision and identity is uncertain. Hover it.`
 
+`SURRENDER -> restart run.`
+
 The engine should never issue a confident item-specific action when the item identity itself is uncertain.
 
 ## Regression cases carried into DM-0.6
@@ -266,6 +326,7 @@ The engine should never issue a confident item-specific action when the item ide
 - treating shop items locally instead of as a transaction set;
 - unsupported skill inference from names;
 - hallucinated item identity (`bag`) from screenshot;
-- excessive Player correction required to keep the run coherent.
+- excessive Player correction required to keep the run coherent;
+- continuing a likely unrecoverable run when restart has higher information-adjusted value per unit of Player time.
 
 These are mandatory checks for future BPB debriefs.
