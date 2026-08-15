@@ -85,4 +85,4 @@ These are generalized reasoning changes. They are not intended to reproduce Play
 
 ## Privacy
 
-Public experiment material uses **Player** only. No real name, personal account information, unrelated projects, CRM data, correspondence, contacts, credentials, or other private context belongs in this repository.
+Public experiment material uses **Player** only. No real name, personal account information, unrelated private projects, private correspondence, credentials, third-party confidential information, or other non-public context belongs in this repository.
