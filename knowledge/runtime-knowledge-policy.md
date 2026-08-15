@@ -30,13 +30,13 @@ If the unknown is decision-material:
 1. Search external sources autonomously first.
 2. Cross-check patch/version when conflicting values appear.
 3. Persist verified mechanics and provenance into the patch-frozen cache so the same lookup is not required again.
-4. If external research cannot resolve it with adequate confidence within the live research budget, stop searching and ask the operator for the minimum in-game tooltip/screenshot required.
+4. If external research cannot resolve it with adequate confidence within the live research budget, stop searching and ask Player for the minimum in-game tooltip/screenshot required.
 
-## CEO/operator time cap
+## Player/operator time cap
 
-External validation is preferred over consuming operator time. The operator is not expected to explain mechanics, enumerate options, or repair the knowledge base. Requests for screenshots/tooltips are a fallback after autonomous lookup fails, and should be batched where possible.
+External validation is preferred over consuming Player/operator time. Player is not expected to explain mechanics, enumerate options, or repair the knowledge base. Requests for screenshots/tooltips are a fallback after autonomous lookup fails, and should be batched where possible.
 
-Voluntary operator intervention remains useful evidence, especially for known model blind spots such as recipe/combinatorial option detection. It does not remove engine ownership of the decision unless explicitly stated as an override.
+Voluntary Player intervention remains useful evidence, especially for known model blind spots such as recipe/combinatorial option detection. It does not remove engine ownership of the decision unless explicitly stated as an override.
 
 ## Live research budget [STAGING]
 
@@ -47,11 +47,11 @@ External validation during live gameplay is bounded.
 - Hard operating budget: approximately 15 seconds of search effort.
 - The budget is an operational ceiling rather than a guaranteed deterministic wall-clock timeout because external tool latency is not fully controllable.
 - If sufficiently reliable, patch-current evidence is found within budget: use it, record provenance, and persist it to the cache.
-- If evidence remains conflicting, weak, or unresolved at the budget: terminate research rather than continuing to search. Request the minimum operator tooltip/screenshot required.
+- If evidence remains conflicting, weak, or unresolved at the budget: terminate research rather than continuing to search. Request the minimum Player tooltip/screenshot required.
 - If the unknown is not decision-material: do not spend the research budget. Continue the gameplay loop.
 - Repeated research for a previously resolved mechanic is a cache failure and should be treated as such.
 
-Purpose: protect live-game latency and CEO/operator time while preventing unsupported mechanics guesses.
+Purpose: protect live-game latency and Player/operator time while preventing unsupported mechanics guesses.
 
 ## Patch overlay
 
