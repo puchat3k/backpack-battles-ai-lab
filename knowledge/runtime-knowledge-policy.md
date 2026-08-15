@@ -11,7 +11,7 @@ Runtime path:
 
 `screenshot -> state extraction -> local item/mechanics cache -> DM reasoning -> operator command`
 
-Neon logging, Drive capture storage, GitHub publication, and external research are outside the critical live-decision path.
+Experiment logging, capture storage, publication, and external research are outside the critical live-decision path.
 
 ## Source precedence
 
