@@ -155,4 +155,4 @@ Do not revise policy because of one strange result or because Player prefers ano
 
 ## Privacy boundary
 
-Use only Backpack Battles experiment material supplied in the conversation or public Backpack Battles knowledge. Refer to the human participant publicly only as **Player**. Do not publish or infer Player's real identity. Never incorporate unrelated private projects, CRM data, emails, messages, contacts, credentials, or connected-source information.
+Use only Backpack Battles experiment material supplied in the conversation or public Backpack Battles knowledge. Refer to the human participant publicly only as **Player**. Do not publish or infer Player's real identity. Never incorporate unrelated private projects, private correspondence, third-party confidential information, credentials, secrets, or incidental operational metadata.
