@@ -55,22 +55,22 @@ Human-readable advice
    |
 Optional player feedback/outcome
    |
-Neon/Postgres
+Structured datastore
 ```
 
 ### Minimal stack
 
 | Layer | Possible implementation |
 | --- | --- |
-| Frontend | Next.js |
-| Hosting | Vercel |
+| Frontend | Conventional web application |
+| Hosting | Managed web hosting |
 | Analysis | Multimodal LLM API |
 | Model response | Structured JSON/schema |
-| Database | Neon/Postgres |
+| Database | Relational datastore |
 | Screenshot storage | Object storage |
-| Game knowledge and decision logic | Version-controlled GitHub files |
+| Game knowledge and decision logic | Version-controlled files |
 | Analytics | SQL initially |
-| Source control/deployment | GitHub |
+| Source control/deployment | Standard source-control workflow |
 
 The application layer is conventional enough to be vibe-coded if desired. The more important component to control explicitly is the reasoning layer: patch assumptions, game knowledge, decision criteria, heuristics and engine versions should remain inspectable and versioned.
 
