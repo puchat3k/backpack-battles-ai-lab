@@ -1,47 +1,51 @@
 # Runtime knowledge policy
 
-Version: KB-0.1
+Version: KB-0.2
 Canonical game patch: 1.1.8
 
 ## Objective
 
-Live play must not depend on external web lookups. Item mechanics should be resolved from a patch-frozen local reference before decision reasoning begins.
+Live play should resolve mechanics from a patch-frozen persistent reference before decision reasoning begins. Unknown decision-material mechanics must not be guessed.
 
 Runtime path:
 
-`screenshot -> state extraction -> local item/mechanics cache -> DM reasoning -> operator command`
-
-Experiment logging, capture storage, publication, and external research are outside the critical live-decision path.
+`screenshot -> state extraction -> persistent mechanics cache -> bounded external validation if needed -> minimum operator query if still unresolved -> DM reasoning -> operator command`
 
 ## Source precedence
 
 1. Explicit in-game tooltip supplied during the run.
 2. Patch 1.1.8 notes supplied for this experiment.
-3. Patch-frozen structured item reference compiled before live play.
-4. Community/reference sources used during offline maintenance only.
-5. Model memory is never authoritative for an exact mechanic.
+3. Patch-frozen persistent mechanics cache in `knowledge/mechanics-1.1.8.json` and maintained local references.
+4. Current maintained external references, preferably Backpack Battles Wiki and other patch-current sources.
+5. Other external/community sources with provenance.
+6. Model memory is never authoritative for an exact mechanic.
 
 ## Unknown-mechanic rule
 
-If an item is recognized but its mechanic is absent or uncertain in the local cache, mark the mechanic `UNKNOWN`.
+If an item, skill, recipe, combination, or mechanic is recognized but absent or uncertain in the persistent cache, mark it `UNKNOWN`.
 
-Do not infer exact effects from:
-- visual design
-- item name
-- remembered historical versions
-- build archetype
-- apparent star geometry
+Do not infer exact effects from visual design, item name, remembered historical versions, build archetype, or apparent star geometry.
 
-If the unknown mechanic is decision-material, request a tooltip rather than inventing a mechanic.
+If the unknown is decision-material:
+1. Search external sources autonomously first.
+2. Cross-check patch/version when conflicting values appear.
+3. Persist verified mechanics and provenance into the patch-frozen cache so the same lookup is not required again.
+4. If external research cannot resolve it with adequate confidence, ask the operator for the minimum in-game tooltip/screenshot required.
+
+## CEO/operator time cap
+
+External validation is preferred over consuming operator time. The operator is not expected to explain mechanics, enumerate options, or repair the knowledge base. Requests for screenshots/tooltips are a fallback after autonomous lookup fails, and should be batched where possible.
+
+Voluntary operator intervention remains useful evidence, especially for known model blind spots such as recipe/combinatorial option detection. It does not remove engine ownership of the decision unless explicitly stated as an override.
 
 ## Patch overlay
 
-The base catalogue is frozen for a game patch. Explicit patch notes override older catalogue values. A later patch creates a new KB version rather than silently mutating historical data.
+The base catalogue is frozen for a game patch. Explicit patch notes and in-game tooltips override older catalogue values. A later patch creates a new KB version rather than silently mutating historical data.
 
 ## Live latency rule
 
-No external web/API lookup should be required for an ordinary shop decision. External research is a maintenance operation between runs or during an explicitly paused run.
+Ordinary decisions should hit the persistent cache. External web/API lookup is permitted during live play when a decision-material mechanic is missing or uncertain. This is an exception path, not the default path. Once resolved, cache the result.
 
 ## Provenance
 
-Every exact mechanic in the cache should carry a source label such as `in_game_tooltip`, `patch_notes_1.1.8`, `bpb_builds_snapshot`, or `wiki_snapshot`.
+Every exact mechanic in the cache carries a source label and verification date. Conflicting external values should be recorded or resolved against the current patch before use.
