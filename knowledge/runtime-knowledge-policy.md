@@ -1,6 +1,7 @@
 # Runtime knowledge policy
 
-Version: KB-0.3-staging
+Version: KB-0.3
+Status: active
 Canonical game patch: 1.1.8
 
 ## Objective
@@ -38,7 +39,7 @@ External validation is preferred over consuming Player/operator time. Player is 
 
 Voluntary Player intervention remains useful evidence, especially for known model blind spots such as recipe/combinatorial option detection. It does not remove engine ownership of the decision unless explicitly stated as an override.
 
-## Live research budget [STAGING]
+## Live research budget
 
 External validation during live gameplay is bounded.
 
