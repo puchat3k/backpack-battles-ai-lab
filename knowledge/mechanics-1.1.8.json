@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "game_patch": "1.1.8",
+  "purpose": "Persistent machine-readable mechanics cache for live BPB decision support.",
+  "source_precedence": ["in_game_tooltip", "patch_notes_1.1.8", "maintained_wiki_current_patch", "other_external_reference", "model_memory"],
+  "skills": {
+    "Just Stats": {
+      "cost": 5,
+      "rounds": [3],
+      "effect": "Start of battle: Gain 12% maximum health and 10% base stamina regeneration.",
+      "source": "backpackbattles.wiki.gg Skill page",
+      "verified_at": "2026-08-15"
+    },
+    "Enchanted Weapons": {
+      "cost": 5,
+      "rounds": [3, 10],
+      "effect": "Attack effects of Weapons have a 25% chance to repeat. Every 5.2s: Gain 1 of the buff you have least of.",
+      "notes": "Current 2026-07 community reference confirms 25%. Applies to weapon attack/hit/miss effects, not effects granted to the weapon by another item such as a socketed gem.",
+      "source": "backpackbattles.wiki.gg Skill page + wikiwiki.jp/bpb current page",
+      "verified_at": "2026-08-15"
+    },
+    "Uniquely Unique": {
+      "cost": 5,
+      "rounds": [3],
+      "effect": "The item triggers 20% faster +10% for each Unique item, Customer Card or Platinum Customer Card. Chance to find Treasure items +65%. You can obtain +2 Treasure items.",
+      "source": "backpackbattles.wiki.gg Uniquely Unique page",
+      "verified_at": "2026-08-15"
+    },
+    "Inner Power": {
+      "cost": 5,
+      "rounds": [3],
+      "effect": "Start of battle: Gain 2 Vampirism and 1 Empower. Relevant tagged items heal 2% more per Vampirism and trigger 2% faster per Vampirism, up to 100%.",
+      "source": "backpackbattles.wiki.gg Skill page",
+      "verified_at": "2026-08-15"
+    },
+    "Unidentified Skill": {
+      "cost": 3,
+      "rounds": [3, 10],
+      "effect": "On buy: Replace this with a random other Skill from your pool.",
+      "source": "backpackbattles.wiki.gg Skill page",
+      "verified_at": "2026-08-15"
+    }
+  },
+  "items": {
+    "Broom": {
+      "rarity": "Common",
+      "type": "Weapon",
+      "cost": 4,
+      "effect": "Opponent misses attack: Gain +2 damage for the next attack. On hit: 33% chance to inflict 1 Blind.",
+      "source": "backpackbattles.wiki.gg Weapon page",
+      "verified_at": "2026-08-15"
+    }
+  }
+}
