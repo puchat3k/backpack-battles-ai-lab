@@ -58,7 +58,7 @@ The GPT should:
 
 A community GPT should use **only** the public Backpack Battles files from this repository.
 
-Do not upload or include unrelated private documents, personal memory exports, CRM data, email, private messages, other project material, database credentials or connector secrets.
+Do not upload or include unrelated private documents, personal exports, private messages, other project material, credentials, secrets, or other non-public data.
 
 Custom GPTs do not use the builder's saved ChatGPT memory, personal custom instructions, or previous conversations; each GPT conversation starts fresh. This helps reproducibility, but users should still review any knowledge files and external Actions they configure themselves.
 
