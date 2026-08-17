@@ -1,8 +1,8 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "game_patch": "1.1.8",
   "purpose": "Persistent machine-readable mechanics cache for live BPB decision support.",
-  "source_precedence": ["in_game_tooltip", "patch_notes_1.1.8", "maintained_wiki_current_patch", "other_external_reference", "model_memory"],
+  "source_precedence": ["in_game_tooltip", "patch_notes_1.1.8", "maintained_wiki_current_patch", "other_external_reference", "player_verified_session", "model_memory"],
   "skills": {
     "Just Stats": {
       "cost": 5,
@@ -37,8 +37,26 @@
       "cost": 3,
       "rounds": [3, 10],
       "effect": "On buy: Replace this with a random other Skill from your pool.",
-      "source": "backpackbattles.wiki.gg Skill page",
-      "verified_at": "2026-08-15"
+      "source": "in-game tooltip",
+      "verified_at": "2026-08-17"
+    },
+    "Shielded": {
+      "cost": 5,
+      "effect": "Shields have +30% chance to block. Armors trigger 60% faster.",
+      "source": "in-game tooltip",
+      "verified_at": "2026-08-17"
+    },
+    "Smithing For Dummies": {
+      "cost": 5,
+      "effect": "On buy: Generate a Whetstone. Start of battle: Crafted Weapons gain 1 damage and use -40% stamina.",
+      "source": "in-game tooltip",
+      "verified_at": "2026-08-17"
+    },
+    "Seal the Deal": {
+      "cost": 5,
+      "effect": "Shop refreshes: 30% chance for a Trade offer. Trade value +1 gold. Every 5.2s: Use 2 Regeneration to gain 3 Vampirism; use 2 Luck to gain 3 Spikes; use 2 Mana to gain 2 Empower.",
+      "source": "in-game tooltip",
+      "verified_at": "2026-08-17"
     }
   },
   "items": {
@@ -49,6 +67,47 @@
       "effect": "Opponent misses attack: Gain +2 damage for the next attack. On hit: 33% chance to inflict 1 Blind.",
       "source": "backpackbattles.wiki.gg Weapon page",
       "verified_at": "2026-08-15"
+    },
+    "Whetstone": {
+      "rarity": "Common",
+      "type": "Accessory",
+      "effect": "Start of battle: starred Weapons gain 1 damage.",
+      "source": "in-game tooltip",
+      "verified_at": "2026-08-17"
+    },
+    "Spear": {
+      "rarity": "Rare",
+      "type": "Weapon",
+      "damage": "3-8 (3.7/s)",
+      "stamina_cost": "1 (0.7/s)",
+      "accuracy": "85%",
+      "cooldown": "1.5s",
+      "effect": "On hit: Destroy 4 Block for each free starred slot.",
+      "source": "in-game tooltip",
+      "verified_at": "2026-08-17"
+    }
+  },
+  "recipes": {
+    "Dragon Gloves": {
+      "inputs": ["Gloves", "Hammer"],
+      "result": "Dragon Gloves",
+      "consumption": {"Gloves": "transformed", "Hammer": "persists"},
+      "source": "player-verified session mechanic",
+      "verified_at": "2026-08-17"
+    },
+    "Longsword": {
+      "inputs": ["Iron Sword", "Whetstone", "Whetstone"],
+      "result": "Longsword",
+      "source": "player-verified session mechanic",
+      "verified_at": "2026-08-17"
+    }
+  },
+  "matchup_observations": {
+    "dual_weapon_into_shields": {
+      "observation": "Dual-weapon architectures can suffer disproportionately into shield and especially double-shield opponents because repeated attack attempts consume stamina while blocked attacks convert poorly into damage.",
+      "scope": "session strategic observation; treat as matchup hypothesis/prior, not universal deterministic mechanic",
+      "source": "player-observed combat dynamics",
+      "verified_at": "2026-08-17"
     }
   }
 }
